@@ -38,6 +38,9 @@ wss.on('connection', (ws) => {
    	}
 
 	ws.on('message', function incoming(message) {
+		if(browser_client != nil){
+			browser_client.send(message)
+		}
 	var json_data = JSON.parse(message)
       console.log('message', clientName, json_data.type);
       if(json_data.type == "gcode" && desktop_client != null){

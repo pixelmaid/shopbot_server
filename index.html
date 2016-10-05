@@ -3,7 +3,7 @@
     <p id='server-time'></p>
     <script>
       var HOST = location.origin.replace(/^http/, 'ws')
-      var ws = new WebSocket(HOST);
+      var ws = new WebSocket(HOST,'browser');
       var el = document.getElementById('server-time');
 
       ws.onmessage = function (event) {
