@@ -26,7 +26,9 @@ wss.on('connection', (ws) => {
     var connection = ws;
     var index = clients.push(connection) - 1;
     var clientName = ws.protocol;
-
+if(browser_client !== null){
+			browser_client.send(clientName);
+		}
     if(clientName == 'ipad'){
     	ipad_client = ws;
    	}
@@ -38,12 +40,12 @@ wss.on('connection', (ws) => {
    	}
 
 	ws.on('message', function incoming(message) {
-		if(browser_client != null){
-			browser_client.send(message)
+		if(browser_client !== null){
+			browser_client.send(message);
 		}
-	var json_data = JSON.parse(message)
+	var json_data = JSON.parse(message);
       console.log('message', clientName, json_data.type);
-      if(json_data.type == "gcode" && desktop_client != null){
+      if(json_data.type == "gcode" && desktop_client !== null){
       	desktop_client.send(JSON.stringify(json_data));
       }
 
