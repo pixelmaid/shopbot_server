@@ -36,6 +36,9 @@ wss.on('connection', (ws) => {
 	} 
 	else if (clientName == 'authoring'){
 		authoring_client = ws;
+		if (browser_client !== null) {
+			browser_client.send("authoring client connected");
+		}
 	}else if (clientName == 'browser') {
 		browser_client = ws;
 	}
