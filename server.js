@@ -57,6 +57,11 @@ wss.on('connection', (ws) => {
 		if (json_data.type == "gcode" && desktop_client !== null) {
 			desktop_client.send(JSON.stringify(json_data));
 		}
+		else if(json_data.type == "behavior_data"){
+			if(authoring_client!== null){
+				authoring_client.send(JSON.stringify(json_data));
+			}
+		}
 
 		ws.send("message recieved");
 
