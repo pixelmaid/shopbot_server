@@ -8,6 +8,7 @@ const path = require('path');
 var ipad_client;
 var desktop_client;
 var browser_client;
+var authoring_client;
 var clients = [];
 
 
@@ -32,7 +33,10 @@ wss.on('connection', (ws) => {
 		ipad_client = ws;
 	} else if (clientName == 'desktop') {
 		desktop_client = ws;
-	} else if (clientName == 'browser') {
+	} 
+	else if (clientName == 'authoring'){
+		authoring_client = ws;
+	}else if (clientName == 'browser') {
 		browser_client = ws;
 	}
 
