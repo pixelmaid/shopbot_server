@@ -36,7 +36,7 @@ wss.on('connection', (ws) => {
 	} 
 	else if (clientName == 'authoring'){
 		authoring_client = ws;
-		if (browser_client !== null) {
+		if (browser_client) {
 			browser_client.send("authoring client connected");
 		}
 	}else if (clientName == 'browser') {
@@ -44,7 +44,9 @@ wss.on('connection', (ws) => {
 	}
 
 	ws.on('message', function incoming(message) {
-		if (browser_client !== null) {
+		console.log('message', clientName, message);
+
+		if (browser_client) {
 			browser_client.send(message);
 		}
 		var json_data = JSON.parse(message);
@@ -53,12 +55,11 @@ wss.on('connection', (ws) => {
 			desktop_client = ws;
 
 		}
-		console.log('message', clientName, json_data.type);
-		if (json_data.type == "gcode" && desktop_client !== null) {
+		if (json_data.type == "gcode" && desktop_client) {
 			desktop_client.send(JSON.stringify(json_data));
 		}
 		else if(json_data.type == "behavior_data"){
-			if(authoring_client!== null){
+			if(authoring_client){
 				authoring_client.send(JSON.stringify(json_data));
 			}
 		}
