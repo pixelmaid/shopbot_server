@@ -33,13 +33,12 @@ wss.on('connection', (ws) => {
 		ipad_client = ws;
 	} else if (clientName == 'desktop') {
 		desktop_client = ws;
-	} 
-	else if (clientName == 'authoring'){
+	} else if (clientName == 'authoring') {
 		authoring_client = ws;
 		if (browser_client) {
 			browser_client.send("authoring client connected");
 		}
-	}else if (clientName == 'browser') {
+	} else if (clientName == 'browser') {
 		browser_client = ws;
 	}
 
@@ -57,15 +56,16 @@ wss.on('connection', (ws) => {
 		}
 		if (json_data.type == "gcode" && desktop_client) {
 			desktop_client.send(JSON.stringify(json_data));
-		}
-		else if(json_data.type == "behavior_data"){
-			if(authoring_client){
+		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change") {
+			if (authoring_client) {
 				authoring_client.send(JSON.stringify(json_data));
 			}
 		}
-
-		ws.send("message recieved");
-
+		if (json_data.type == "brush_init") {
+			ws.send("init_data_recieved");
+		} else {
+			ws.send("message recieved");
+		}
 
 	});
 
