@@ -60,7 +60,7 @@ wss.on('connection', (ws) => {
 		if(json_data.type == "fabricatior_data"){
 
 			if(browser_client){
-				browser_client.send("fabrication data generated");
+				browser_client.send("fabrication data generated ",authoring_client);
 			}
 			if(authoring_client){
 			browser_client.send("sending fab data to authoring client");
