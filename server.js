@@ -86,6 +86,9 @@ wss.on('connection', (ws) => {
 
 	ws.on('close', function close(){
 		console.log(clientName + ' client disconnected');
+		if(browser_client){
+			browser_client.send(clientName + ' client disconnected');
+		}
 		if(clientName == "authoring"){
 			authoring_client = null;
 		}
