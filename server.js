@@ -46,7 +46,7 @@ wss.on('connection', (ws) => {
 		console.log('message', clientName, message);
 
 		if (browser_client) {
-			browser_client.send(message);
+			//browser_client.send(message);
 		}
 		var json_data = JSON.parse(message);
 		if (json_data.name == "desktop_client") {
@@ -57,8 +57,16 @@ wss.on('connection', (ws) => {
 			clientName = "desktop";
 
 		}
-		if((json_data.type == "fabricator_data") && (authoring_client)){
+		if((json_data.type == "fabricator_data"){
+
+			if(browser_client){
+				browser_client.send("fabrication data generated")
+			}
+			if(authoring_client){
+			browser_client.send("sending fab data to authoring client")
 			authoring_client.send(JSON.stringify(json_data));
+
+			}
 		}
 		if (json_data.type == "gcode" && desktop_client) {
 			desktop_client.send(JSON.stringify(json_data));
