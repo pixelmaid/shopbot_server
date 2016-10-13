@@ -57,13 +57,13 @@ wss.on('connection', (ws) => {
 			clientName = "desktop";
 
 		}
-		if((json_data.type == "fabricator_data"){
+		if(json_data.type == "fabricator_data"){
 
 			if(browser_client){
-				browser_client.send("fabrication data generated")
+				browser_client.send("fabrication data generated");
 			}
 			if(authoring_client){
-			browser_client.send("sending fab data to authoring client")
+			browser_client.send("sending fab data to authoring client");
 			authoring_client.send(JSON.stringify(json_data));
 
 			}
