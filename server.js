@@ -89,11 +89,11 @@ wss.on('connection', (ws) => {
 		if(clientName == "authoring"){
 			authoring_client = null;
 		}
-		else if(clientName == "desktop_client"){
+		else if(clientName == "desktop"){
 			desktop_client = null;
 
 		}
-		else if(clientName == "browser_client"){
+		else if(clientName == "browser"){
 			browser_client = null;
 		}
 		clients.splice(index, 1);
