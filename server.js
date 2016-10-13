@@ -50,9 +50,15 @@ wss.on('connection', (ws) => {
 		}
 		var json_data = JSON.parse(message);
 		if (json_data.name == "desktop_client") {
-			browser_client.send("desktop connected");
+			if(browser_client){
+				browser_client.send("desktop connected");
+			}
 			desktop_client = ws;
+			clientName = "desktop";
 
+		}
+		if((json_data.type == "fabricator_data") && (authoring_client)){
+			authoring_client.send(JSON.stringify(json_data));
 		}
 		if (json_data.type == "gcode" && desktop_client) {
 			desktop_client.send(JSON.stringify(json_data));
@@ -70,7 +76,20 @@ wss.on('connection', (ws) => {
 	});
 
 
-	ws.on('close', () => console.log('Client disconnected'));
+	ws.on('close', function close(){
+		console.log(clientName + ' client disconnected');
+		if(clientName == "authoring"){
+			authoring_client = null;
+		}
+		else if(clientName == "desktop_client"){
+			desktop_client = null;
+
+		}
+		else if(clientName == "browser_client"){
+			browser_client = null;
+		}
+		clients.splice(index, 1);
+	});
 });
 
 
