@@ -57,7 +57,7 @@ wss.on('connection', (ws) => {
 			clientName = "desktop";
 
 		}
-		if(json_data.type == "fabricator_data"){
+		if(json_data.type == "fabricatior_data"){
 
 			if(browser_client){
 				browser_client.send("fabrication data generated");
