@@ -5,7 +5,7 @@ const path = require('path');
 
 
 // list of currently connected clients
-var ipad_client;
+var drawing_client;
 var desktop_client;
 var browser_client;
 var authoring_client;
@@ -29,8 +29,10 @@ wss.on('connection', (ws) => {
 	var connection = ws;
 	var index = clients.push(connection) - 1;
 	var clientName = ws.protocol;
-	if (clientName == 'ipad') {
-		ipad_client = ws;
+	if (clientName == 'drawing') {
+		browser_client.send("drawing client connected");
+
+		drawing_client = ws;
 	} else if (clientName == 'desktop') {
 		desktop_client = ws;
 	} else if (clientName == 'authoring') {
@@ -62,9 +64,9 @@ wss.on('connection', (ws) => {
 			if(browser_client){
 				browser_client.send("fabrication data generated " + String(authoring_client));
 			}
-			if(authoring_client){
-			browser_client.send("sending fab data to authoring client");
-			authoring_client.send(JSON.stringify(json_data));
+			if(drawing_client){
+			browser_client.send("sending fab data to drawing client");
+			drawing_client.send(JSON.stringify(json_data));
 
 			}
 		}
@@ -91,6 +93,9 @@ wss.on('connection', (ws) => {
 		}
 		if(clientName == "authoring"){
 			authoring_client = null;
+		}
+		if(clientName == "drawing"){
+			drawing_client = null;
 		}
 		else if(clientName == "desktop"){
 			desktop_client = null;
