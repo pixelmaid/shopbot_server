@@ -35,6 +35,9 @@ wss.on('connection', (ws) => {
 		drawing_client = ws;
 	} else if (clientName == 'desktop') {
 		desktop_client = ws;
+		if(drawing_client){
+			drawing_client.send("fabricator connected")
+		}
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
 		if (browser_client) {
@@ -62,15 +65,19 @@ wss.on('connection', (ws) => {
 		if(json_data.type == "fabricatior_data"){
 
 			if(browser_client){
-				browser_client.send("fabrication data generated " + String(authoring_client));
+				//browser_client.send("fabrication data generated " + String(authoring_client));
 			}
 			if(drawing_client){
-			browser_client.send("sending fab data to drawing client");
+			//browser_client.send("sending fab data to drawing client");
 			drawing_client.send(JSON.stringify(json_data));
 
 			}
 		}
 		if (json_data.type == "gcode" && desktop_client) {
+
+			if(browser_client){
+				browser_client.send("gcode generated: " + JSON.stringify(json_data)+"\n");
+			}
 			desktop_client.send(JSON.stringify(json_data));
 		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change") {
 			if (authoring_client) {
