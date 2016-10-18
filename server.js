@@ -6,7 +6,7 @@ const path = require('path');
 
 // list of currently connected clients
 var drawing_client;
-var desktop_client;
+var fabricator_client;
 var browser_client;
 var authoring_client;
 var clients = [];
@@ -34,9 +34,14 @@ wss.on('connection', (ws) => {
 		browser_client.send("drawing client connected");
 		}
 
+
 		drawing_client = ws;
-	} else if (clientName == 'desktop') {
-		desktop_client = ws;
+		if(fabricator_client){
+			drawing_client.send("fabricator connected");
+		}
+	} else if (clientName == 'fabricator') {
+		fabricator_client = ws;
+
 
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
@@ -54,12 +59,12 @@ wss.on('connection', (ws) => {
 			//browser_client.send(message);
 		}
 		var json_data = JSON.parse(message);
-		if (json_data.name == "desktop_client") {
+		if (json_data.name == "fabricator") {
 			if(browser_client){
-				browser_client.send("desktop connected");
+				browser_client.send("fabricator connected");
 			}
-			desktop_client = ws;
-			clientName = "desktop";
+			fabricator_client = ws;
+			clientName = "fabricator";
 			if(drawing_client){
 			drawing_client.send("fabricator connected");
 		}
@@ -76,12 +81,12 @@ wss.on('connection', (ws) => {
 
 			}
 		}
-		if (json_data.type == "gcode" && desktop_client) {
+		if (json_data.type == "gcode" && fabricator_client) {
 
 			if(browser_client){
 				browser_client.send("gcode generated: " + JSON.stringify(json_data)+"\n");
 			}
-			desktop_client.send(JSON.stringify(json_data));
+			fabricator_client.send(JSON.stringify(json_data));
 		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change") {
 			if (authoring_client) {
 				authoring_client.send(JSON.stringify(json_data));
@@ -107,8 +112,8 @@ wss.on('connection', (ws) => {
 		if(clientName == "drawing"){
 			drawing_client = null;
 		}
-		else if(clientName == "desktop"){
-			desktop_client = null;
+		else if(clientName == "fabricator"){
+			fabricator_client = null;
 
 		}
 		else if(clientName == "browser"){
