@@ -30,7 +30,9 @@ wss.on('connection', (ws) => {
 	var index = clients.push(connection) - 1;
 	var clientName = ws.protocol;
 	if (clientName == 'drawing') {
+		if(browser_client){
 		browser_client.send("drawing client connected");
+		}
 
 		drawing_client = ws;
 	} else if (clientName == 'desktop') {
