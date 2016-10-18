@@ -35,9 +35,7 @@ wss.on('connection', (ws) => {
 		drawing_client = ws;
 	} else if (clientName == 'desktop') {
 		desktop_client = ws;
-		if(drawing_client){
-			drawing_client.send("fabricator connected")
-		}
+
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
 		if (browser_client) {
@@ -60,6 +58,9 @@ wss.on('connection', (ws) => {
 			}
 			desktop_client = ws;
 			clientName = "desktop";
+			if(drawing_client){
+			drawing_client.send("fabricator connected");
+		}
 
 		}
 		if(json_data.type == "fabricatior_data"){
