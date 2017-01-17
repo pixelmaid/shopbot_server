@@ -30,13 +30,13 @@ wss.on('connection', (ws) => {
 	var index = clients.push(connection) - 1;
 	var clientName = ws.protocol;
 	if (clientName == 'drawing') {
-		if(browser_client){
-		browser_client.send("drawing client connected");
+		if (browser_client) {
+			browser_client.send("drawing client connected");
 		}
 
 
 		drawing_client = ws;
-		if(fabricator_client){
+		if (fabricator_client) {
 			drawing_client.send("fabricator connected");
 		}
 	} else if (clientName == 'fabricator') {
@@ -60,31 +60,31 @@ wss.on('connection', (ws) => {
 		}
 		var json_data = JSON.parse(message);
 		if (json_data.name == "fabricator") {
-			if(browser_client){
+			if (browser_client) {
 				browser_client.send("fabricator connected");
 			}
 			fabricator_client = ws;
 			clientName = "fabricator";
-			if(drawing_client){
-			drawing_client.send("fabricator connected");
-		}
+			if (drawing_client) {
+				drawing_client.send("fabricator connected");
+			}
 
 		}
-		if(json_data.type == "fabricatior_data"){
+		if (json_data.type == "fabricatior_data") {
 
-			if(browser_client){
+			if (browser_client) {
 				//browser_client.send("fabrication data generated " + String(authoring_client));
 			}
-			if(drawing_client){
-			//browser_client.send("sending fab data to drawing client");
-			drawing_client.send(JSON.stringify(json_data));
+			if (drawing_client) {
+				//browser_client.send("sending fab data to drawing client");
+				drawing_client.send(JSON.stringify(json_data));
 
 			}
 		}
 		if (json_data.type == "gcode" && fabricator_client) {
 
-			if(browser_client){
-				browser_client.send("gcode generated: " + JSON.stringify(json_data)+"\n");
+			if (browser_client) {
+				browser_client.send("gcode generated: " + JSON.stringify(json_data) + "\n");
 			}
 			fabricator_client.send(JSON.stringify(json_data));
 		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change") {
@@ -93,39 +93,37 @@ wss.on('connection', (ws) => {
 			}
 		}
 		if (json_data.type == "brush_init") {
-			ws.send("init_data_recieved");
+			ws.send("init_data_received");
 		} else {
-			ws.send("message recieved");
+			ws.send("message received");
 		}
+
+		if (json_data.type == "data_request") {
+			if(json_data.requester == "authoring" && authoring_client && drawing_client){
+				drawing_client.send(JSON.stringify(json_data));
+			}
+		}
+
 
 	});
 
 
-	ws.on('close', function close(){
+	ws.on('close', function close() {
 		console.log(clientName + ' client disconnected');
-		if(clientName != "browser" && browser_client){
+		if (clientName != "browser" && browser_client) {
 			browser_client.send(clientName + ' client disconnected');
 		}
-		if(clientName == "authoring"){
+		if (clientName == "authoring") {
 			authoring_client = null;
 		}
-		if(clientName == "drawing"){
+		if (clientName == "drawing") {
 			drawing_client = null;
-		}
-		else if(clientName == "fabricator"){
+		} else if (clientName == "fabricator") {
 			fabricator_client = null;
 
-		}
-		else if(clientName == "browser"){
+		} else if (clientName == "browser") {
 			browser_client = null;
 		}
 		clients.splice(index, 1);
 	});
 });
-
-
-
-/*setInterval(() => {
-  wss.clients.forEach((client) => {
-  });
-}, 1000);*/
