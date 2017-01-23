@@ -101,7 +101,7 @@ wss.on('connection', (ws) => {
 
 		if (json_data.type == "data_request" || json_data.type == "authoring_request") {
 			if(json_data.requester == "authoring" && authoring_client && drawing_client){
-
+				console.log("requesting authoring response from drawing client");
 				drawing_client.send(JSON.stringify(json_data));
 			}
 		}
