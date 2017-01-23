@@ -99,7 +99,7 @@ wss.on('connection', (ws) => {
 			ws.send("message received");
 		}
 
-		if (json_data.type == "data_request") {
+		if (json_data.type == "data_request" || json_data.type == "authoring_request") {
 			if(json_data.requester == "authoring" && authoring_client && drawing_client){
 
 				drawing_client.send(JSON.stringify(json_data));
