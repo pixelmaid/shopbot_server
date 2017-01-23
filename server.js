@@ -87,11 +87,12 @@ wss.on('connection', (ws) => {
 				browser_client.send("gcode generated: " + JSON.stringify(json_data) + "\n");
 			}
 			fabricator_client.send(JSON.stringify(json_data));
-		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change") {
+		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change" || json_data.type == "authoring_response" ) {
 			if (authoring_client) {
 				authoring_client.send(JSON.stringify(json_data));
 			}
 		}
+
 		if (json_data.type == "brush_init") {
 			ws.send("init_data_received");
 		} else {
@@ -100,6 +101,7 @@ wss.on('connection', (ws) => {
 
 		if (json_data.type == "data_request") {
 			if(json_data.requester == "authoring" && authoring_client && drawing_client){
+
 				drawing_client.send(JSON.stringify(json_data));
 			}
 		}
