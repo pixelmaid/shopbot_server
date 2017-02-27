@@ -70,7 +70,7 @@ wss.on('connection', (ws) => {
 			}
 
 		}
-		if (json_data.type == "fabricatior_data") {
+		if (json_data.type == "fabricator_data") {
 
 			if (browser_client) {
 				//browser_client.send("fabrication data generated " + String(authoring_client));
