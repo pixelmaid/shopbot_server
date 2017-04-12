@@ -30,8 +30,8 @@ wss.on('connection', (ws) => {
 	var index = clients.push(connection) - 1;
 	var clientName = ws.protocol;
 	if (clientName == 'drawing') {
-		if (browser_client) {
-			browser_client.send("drawing client connected");
+		if (authoring_client) {
+			authoring_client.send("drawing client connected");
 		}
 
 
@@ -45,12 +45,10 @@ wss.on('connection', (ws) => {
 
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
-		if (browser_client) {
-			browser_client.send("authoring client connected");
+		if (drawing_client) {
+			drawing_client.send("authoring client connected");
 		}
-	} else if (clientName == 'browser') {
-		browser_client = ws;
-	}
+	} 
 
 	ws.on('message', function incoming(message) {
 		console.log('message', clientName, message);
