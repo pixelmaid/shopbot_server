@@ -46,7 +46,8 @@ wss.on('connection', (ws) => {
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
 		if (drawing_client) {
-			drawing_client.send("authoring client connected");
+			console.log("sending authoring connected message")
+			drawing_client.send("authoring_client_connected");
 		}
 	} 
 
