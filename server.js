@@ -85,7 +85,7 @@ wss.on('connection', (ws) => {
 				browser_client.send("gcode generated: " + JSON.stringify(json_data) + "\n");
 			}
 			fabricator_client.send(JSON.stringify(json_data));
-		} else if (json_data.type == "behavior_data" || json_data.type == "behavior_change" || json_data.type == "authoring_response" ) {
+		} else if (json_data.type == "synchronize" || json_data.type == "behavior_data" || json_data.type == "authoring_response" ) {
 			if (authoring_client) {
 				authoring_client.send(JSON.stringify(json_data));
 			}
