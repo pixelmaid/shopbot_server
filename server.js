@@ -46,7 +46,7 @@ wss.on('connection', (ws) => {
 	} else if (clientName == 'authoring') {
 		authoring_client = ws;
 		if (drawing_client) {
-			console.log("sending authoring connected message")
+			console.log("sending authoring connected message");
 			drawing_client.send("authoring_client_connected");
 		}
 	} 
@@ -98,7 +98,7 @@ wss.on('connection', (ws) => {
 			ws.send("message received");
 		}
 
-		if (json_data.type == "data_request" || json_data.type == "synchronize_request" || json_data.type == "authoring_request") {
+		if (json_data.type == "data_request" || json_data.type == "synchronize_request" || json_data.type == "authoring_request" || json_data.type == "storage_request") {
 			if(json_data.requester == "authoring" && authoring_client && drawing_client){
 				console.log("requesting authoring response from drawing client");
 				drawing_client.send(JSON.stringify(json_data));
